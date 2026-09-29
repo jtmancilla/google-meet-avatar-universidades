@@ -78,9 +78,9 @@ Cada vez que vayas a despachar un avatar:
 python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Clau --universidad UP --sesion 01
 ```
 
-### 2. Julius — Universidad Nacional Autonoma de Mexico (UNAM)
+### 2. Ricardo — Universidad Nacional Autonoma de Mexico (UNAM)
 ```bash
-python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Julius --universidad UNAM --sesion 01
+python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Ricardo --universidad UNAM --sesion 01
 ```
 
 ### 3. Tony — Tecnologico de Monterrey (TEC)
@@ -95,7 +95,7 @@ python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Tony --universi
 | Parametro | Opciones | Descripcion |
 |---|---|---|
 | `meeting_url` | URL de Google Meet | Requerido. Enlace completo de la reunion. |
-| `--avatar` | `Clau`, `Julius`, `Tony` | Voz e imagen: `Clau` (mujer), `Julius` (hombre), `Tony` (hombre). |
+| `--avatar` | `Clau`, `Ricardo`, `Tony` | Voz e imagen: `Clau` (mujer), `Ricardo` (hombre), `Tony` (hombre). |
 | `--universidad` | `UP`, `UNAM`, `TEC` | Tono y contexto: Universidad Panamericana (`UP`), UNAM (`UNAM`), Tec de Monterrey (`TEC`). |
 | `--sesion` | Texto (ej. `01`, `02`) | Opcional. Identificador de sesion para el encabezado de las notas. |
 | `--bot-name` | Texto | Opcional. Sobreescribe el nombre visible en Google Meet si deseas uno distinto. |
@@ -114,7 +114,7 @@ python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Tony --universi
 3. **Modo wake-word (activacion por voz)**:
    Solo habla cuando se le llama directamente por su nombre:
    - Para hablar con Clau: *"Hola Clau, ¿nos escuchas?"* o *"Oye Clau, ¿que opinas de este punto?"*.
-   - Para hablar con Julius: *"Hola Julius"* o *"Oye Julius, danos una introduccion"*.
+   - Para hablar con Ricardo: *"Hola Ricardo"* o *"Oye Ricardo, danos una introduccion"*.
    - Para hablar con Tony: *"Hola Tony, adelante con tu comentario"*.
 
 4. **Regresar a silencio**:

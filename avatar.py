@@ -32,7 +32,7 @@ for _k, _v in list(os.environ.items()):
         os.environ[_k] = _v[1:-1]
 
 AGENT_NAME = "meet-bot"
-VALID_AVATARS = ["Tony", "Clau", "Julius"]
+VALID_AVATARS = ["Tony", "Clau", "Ricardo"]
 VALID_UNIVERSITIES = ["UP", "TEC", "UNAM"]
 
 
@@ -57,9 +57,9 @@ async def main() -> None:
         description="Despachar avatar a una reunion de Google Meet",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""Ejemplos de uso:
-  python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Clau --universidad TEC --sesion 01
-  python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Tony --universidad UP --sesion 02
-  python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Julius --universidad UNAM --sesion 03
+  python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Clau --universidad UP --sesion 01
+  python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Ricardo --universidad UNAM --sesion 02
+  python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Tony --universidad TEC --sesion 03
 """,
     )
     parser.add_argument("meeting_url", help="URL completa de la reunion de Google Meet")
@@ -67,7 +67,7 @@ async def main() -> None:
         "--avatar",
         choices=VALID_AVATARS,
         default="Tony",
-        help="Avatar a utilizar: Tony (hombre), Clau (mujer), Julius (hombre). Default: Tony",
+        help="Avatar a utilizar: Tony (hombre), Clau (mujer), Ricardo (hombre). Default: Tony",
     )
     parser.add_argument(
         "--universidad",
