@@ -13,86 +13,115 @@ El procesamiento de audio, LLM y generacion de video se ejecuta en un servidor c
 
 ---
 
-## Instalacion inicial (una sola vez)
+## Instalacion y configuracion (una sola vez)
 
-1. Clonar el repositorio:
+### 1. Clonar el repositorio
+Abre tu terminal y clona la carpeta del proyecto:
+```bash
+git clone https://github.com/jtmancilla/google-meet-avatar-universidades.git
+cd google-meet-avatar-universidades
+```
+
+### 2. Crear y activar un entorno virtual (Recomendado)
+El entorno virtual aísla las librerías del proyecto para evitar conflictos con el sistema:
+
+- **En macOS / Linux**:
+  ```bash
+  python3 -m venv .venv
+  source .venv/bin/activate
+  ```
+
+- **En Windows (PowerShell / CMD)**:
+  ```bash
+  python -m venv .venv
+  .venv\Scripts\activate
+  ```
+
+*(Notarás que tu terminal muestra el prefijo `(.venv)` indicando que el entorno está activo).*
+
+### 3. Instalar dependencias
+Dentro del entorno virtual activo, instala las dos librerías necesarias:
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Crear el archivo de configuracion `.env`
+Genera tu archivo de credenciales a partir de la plantilla:
+```bash
+cp .env.example .env
+```
+*(El archivo `.env.example` ya contiene las credenciales de conexion al servidor central).*
+
+---
+
+## Uso diario
+
+Cada vez que vayas a despachar un avatar:
+
+1. Entra a la carpeta del proyecto:
    ```bash
-   git clone https://github.com/jtmancilla/google-meet-avatar-universidades.git
    cd google-meet-avatar-universidades
    ```
 
-2. Instalar dependencias:
-   ```bash
-   pip install -r requirements.txt
-   ```
-   *(En Mac o Linux con varias versiones de Python, usar `pip3 install -r requirements.txt`)*.
+2. Activa tu entorno virtual:
+   - En macOS / Linux: `source .venv/bin/activate`
+   - En Windows: `.venv\Scripts\activate`
 
-3. Crear el archivo `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-   *(El archivo `.env.example` ya contiene las credenciales preconfiguradas para conectarse al servidor central).*
+3. Ejecuta el comando pasando el link de tu reunion de Google Meet.
 
 ---
 
-## Uso
+## Ejemplos oficiales
 
-Para enviar un avatar a una llamada, ejecuta el script pasando el enlace de Google Meet:
-
+### 1. Clau — Universidad Panamericana (UP)
 ```bash
-python avatar.py "https://meet.google.com/xxx-xxxx-xxx" --avatar Clau --universidad TEC --sesion 01
+python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Clau --universidad UP --sesion 01
 ```
-*(En Mac o Linux, si `python` no esta enlazado, usar `python3 avatar.py ...`)*.
+
+### 2. Julius — Universidad Nacional Autonoma de Mexico (UNAM)
+```bash
+python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Julius --universidad UNAM --sesion 01
+```
+
+### 3. Tony — Tecnologico de Monterrey (TEC)
+```bash
+python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Tony --universidad TEC --sesion 01
+```
 
 ---
 
-## Opciones disponibles
+## Parametros disponibles
 
-| Parametro | Opciones | Default | Descripcion |
-|---|---|---|---|
-| `meeting_url` | URL de Meet | Requerido | Enlace completo de la llamada |
-| `--avatar` | `Tony`, `Clau`, `Julius` | `Tony` | `Tony` (hombre), `Clau` (mujer), `Julius` (hombre) |
-| `--universidad` | `UP`, `TEC`, `UNAM` | `UP` | Tono y contexto: Universidad Panamericana (`UP`), Tecnologico de Monterrey (`TEC`), UNAM (`UNAM`) |
-| `--sesion` | Texto (ej. `01`, `02`) | Opcional | Numero de sesion. Se incluye en el encabezado de las minutas generadas. |
-| `--bot-name` | Texto | Nombre de avatar | Sobreescribe el nombre visible del participante en Google Meet. |
-| `--no-chat` | Flag | Desactivado | Desactiva que el avatar lea mensajes enviados en el chat de Meet. |
-
----
-
-## Ejemplos rapidos
-
-### Clau en el Tecnologico de Monterrey
-```bash
-python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Clau --universidad TEC --sesion 01
-```
-
-### Tony en la Universidad Panamericana
-```bash
-python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Tony --universidad UP --sesion 02
-```
-
-### Julius en la UNAM
-```bash
-python avatar.py "https://meet.google.com/abc-defg-hij" --avatar Julius --universidad UNAM --sesion 03
-```
+| Parametro | Opciones | Descripcion |
+|---|---|---|
+| `meeting_url` | URL de Google Meet | Requerido. Enlace completo de la reunion. |
+| `--avatar` | `Clau`, `Julius`, `Tony` | Voz e imagen: `Clau` (mujer), `Julius` (hombre), `Tony` (hombre). |
+| `--universidad` | `UP`, `UNAM`, `TEC` | Tono y contexto: Universidad Panamericana (`UP`), UNAM (`UNAM`), Tec de Monterrey (`TEC`). |
+| `--sesion` | Texto (ej. `01`, `02`) | Opcional. Identificador de sesion para el encabezado de las notas. |
+| `--bot-name` | Texto | Opcional. Sobreescribe el nombre visible en Google Meet si deseas uno distinto. |
+| `--no-chat` | Flag | Opcional. Desactiva la lectura de mensajes del chat de la llamada. |
 
 ---
 
 ## Como interactuar con el avatar en la reunion
 
 1. **Admitir al participante**:
-   El bot aparecera en la sala de espera de Google Meet. Un participante humano debe admitirlo.
+   El avatar aparecera en la sala de espera de Google Meet pidiendo entrar. Un participante humano debe admitirlo.
 
 2. **Entrada en silencio**:
-   El bot entra en silencio para no interrumpir la sesion.
+   El bot entra en silencio absoluto para no interrumpir el inicio de la sesion.
 
-3. **Modo wake-word**:
-   Solo responde cuando se le llama por su nombre.
-   - Para llamarlo: *"Hola Clau"*, *"Oye Tony"*, *"Julius, ¿que opinas de este tema?"*.
-   - Frases de cierre: *"Gracias, eso es todo"* o *"Ya puedes irte"* lo regresan a silencio.
+3. **Modo wake-word (activacion por voz)**:
+   Solo habla cuando se le llama directamente por su nombre:
+   - Para hablar con Clau: *"Hola Clau, ¿nos escuchas?"* o *"Oye Clau, ¿que opinas de este punto?"*.
+   - Para hablar con Julius: *"Hola Julius"* o *"Oye Julius, danos una introduccion"*.
+   - Para hablar con Tony: *"Hola Tony, adelante con tu comentario"*.
 
-4. **Minuta o resumen de la sesion**:
-   Si le dices *"Oye Clau, genera la nota de la sesion"*, resumira las acciones, acuerdos y pendientes acordados en la reunion.
+4. **Regresar a silencio**:
+   Frases como *"Gracias, eso era todo"* o *"Ya puedes irte"* lo regresan a silencio inmediatamente.
 
-5. **Terminar la sesion**:
-   Para retirarlo de la llamada, simplemente expulsalo de la reunion desde el panel de participantes de Google Meet.
+5. **Minuta de la sesion**:
+   Si le dices *"Oye [Nombre], genera la nota de la sesion"*, guardara un documento estructurado con los acuerdos, acciones y pendientes tratados en la reunion.
+
+6. **Terminar la sesion**:
+   Para retirarlo, simplemente expulsalo de la llamada desde el panel de participantes de Google Meet. Al salir de la llamada se liberan los recursos y se detiene el servicio en el servidor.
