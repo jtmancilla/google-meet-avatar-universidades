@@ -17,9 +17,11 @@ import argparse
 import asyncio
 import json
 import os
+import ssl
 import sys
 import uuid
 
+import aiohttp
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -107,25 +109,33 @@ async def main() -> None:
     if args.objective:
         metadata["objective"] = args.objective
 
-    async with api.LiveKitAPI() as lkapi:
-        room_name = f"meet-bot-{uuid.uuid4().hex[:8]}"
-        await lkapi.room.create_room(api.CreateRoomRequest(name=room_name))
-        dispatch = await lkapi.agent_dispatch.create_dispatch(
-            api.CreateAgentDispatchRequest(
-                agent_name=AGENT_NAME,
-                room=room_name,
-                metadata=json.dumps(metadata),
+    # Crear contexto SSL Inseguro (omite validación de certificados)
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+
+    # Crear sesión aiohttp sin verificación SSL para LiveKit API
+    connector = aiohttp.TCPConnector(ssl=ssl_context)
+    async with aiohttp.ClientSession(connector=connector) as session:
+        async with api.LiveKitAPI(session=session) as lkapi:
+            room_name = f"meet-bot-{uuid.uuid4().hex[:8]}"
+            await lkapi.room.create_room(api.CreateRoomRequest(name=room_name))
+            dispatch = await lkapi.agent_dispatch.create_dispatch(
+                api.CreateAgentDispatchRequest(
+                    agent_name=AGENT_NAME,
+                    room=room_name,
+                    metadata=json.dumps(metadata),
+                )
             )
-        )
-        print(f"\n[OK] Despachado exitosamente")
-        print(f"  Avatar:      {args.avatar}")
-        print(f"  Universidad: {args.universidad.upper()}")
-        print(f"  URL:         {args.meeting_url}")
-        if args.sesion:
-            print(f"  Sesion ID:   {args.sesion}")
-        print(f"  Room:        {room_name}")
-        print(f"  Dispatch ID: {dispatch.id}")
-        print("\nSiguiente paso: ve a Google Meet y admite al participante en la sala de espera.\n")
+            print(f"\n[OK] Despachado exitosamente")
+            print(f"  Avatar:      {args.avatar}")
+            print(f"  Universidad: {args.universidad.upper()}")
+            print(f"  URL:         {args.meeting_url}")
+            if args.sesion:
+                print(f"  Sesion ID:   {args.sesion}")
+            print(f"  Room:        {room_name}")
+            print(f"  Dispatch ID: {dispatch.id}")
+            print("\nSiguiente paso: ve a Google Meet y admite al participante en la sala de espera.\n")
 
 
 if __name__ == "__main__":
